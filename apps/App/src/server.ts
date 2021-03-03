@@ -21,7 +21,7 @@ export class Server {
 
   public async Start(): Promise<void> {
     //Import env variables
-    if (process.env.RUN_LOCAL) {
+    if (!process.env.SERVERLESS) {
       const dot = dotenv.config({ path: path.resolve('../../environments/') })
       // console.log("Environment Variables:", dot);
     }
@@ -31,14 +31,14 @@ export class Server {
     //console.log("process.env", process.env);
 
     //Configure AWS Creds
-    if (process.env.RUN_LOCAL) {
+    if (!process.env.SERVERLESS) {
       credsConfigLocal();
     }
 
     //console.log("AWS", AWS.config);
 
     //Generate tsoa routes & spec
-    if (process.env.RUN_LOCAL) {
+    if (!process.env.SERVERLESS) {
       fs.mkdir(
         path.resolve(process.cwd(), "src/middleware/tsoa"),
         { recursive: true },
@@ -88,7 +88,7 @@ export class Server {
     });
 
     //Start Express Server
-    if (process.env.RUN_LOCAL) {
+    if (!process.env.SERVERLESS) {
       const port = env === "test" ? 5000 : 7001;
       const server = this.app.listen(port, () => {
         console.log(`Server listening on port http://localhost:${port}`);

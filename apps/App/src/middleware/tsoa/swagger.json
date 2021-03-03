@@ -6,63 +6,6 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"PatientInfo": {
-				"properties": {
-					"id": {
-						"type": "string"
-					},
-					"type": {
-						"type": "string"
-					},
-					"firstName": {
-						"type": "string"
-					},
-					"lastName": {
-						"type": "string"
-					},
-					"bloodType": {
-						"type": "string"
-					},
-					"gender": {
-						"type": "string"
-					},
-					"age": {
-						"type": "number",
-						"format": "double"
-					},
-					"race": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"id",
-					"type",
-					"firstName",
-					"lastName",
-					"bloodType",
-					"gender",
-					"age",
-					"race"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"PatientBase": {
-				"properties": {
-					"id": {
-						"type": "string"
-					},
-					"type": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"id",
-					"type"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"PatientCheckup": {
 				"properties": {
 					"id": {
@@ -105,6 +48,63 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"PatientBase": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"type"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PatientInfo": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"bloodType": {
+						"type": "string"
+					},
+					"gender": {
+						"type": "string"
+					},
+					"age": {
+						"type": "number",
+						"format": "double"
+					},
+					"race": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"type",
+					"firstName",
+					"lastName",
+					"bloodType",
+					"gender",
+					"age",
+					"race"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {
@@ -141,9 +141,9 @@
 						}
 					}
 				},
-				"summary": "Initialize the database, the default data",
+				"summary": "Get a Consumer's daily quotas",
 				"tags": [
-					"Patients Controller"
+					"Patient"
 				],
 				"security": [],
 				"parameters": []
@@ -162,9 +162,8 @@
 						}
 					}
 				},
-				"summary": "Get patient information",
 				"tags": [
-					"Patients Controller"
+					"Patient"
 				],
 				"security": [],
 				"parameters": [
@@ -198,9 +197,8 @@
 						}
 					}
 				},
-				"summary": "Create patient information",
 				"tags": [
-					"Patients Controller"
+					"Patient"
 				],
 				"security": [],
 				"parameters": [],
@@ -211,13 +209,13 @@
 							"schema": {
 								"anyOf": [
 									{
-										"$ref": "#/components/schemas/PatientInfo"
+										"$ref": "#/components/schemas/PatientCheckup"
 									},
 									{
 										"$ref": "#/components/schemas/PatientBase"
 									},
 									{
-										"$ref": "#/components/schemas/PatientCheckup"
+										"$ref": "#/components/schemas/PatientInfo"
 									}
 								]
 							}

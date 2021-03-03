@@ -3,24 +3,24 @@
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute, HttpStatusCodeLiteral, TsoaResponse } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { BCXExaMedical } from './../../controllers/patient';
+import { PatientController } from './../../controllers/patient';
 import { expressAuthentication } from './../../../node_modules/bcx-eco-system-libary/dist/helpers/security/old/authenication.js';
 import * as express from 'express';
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-    "PatientInfo": {
+    "PatientCheckup": {
         "dataType": "refObject",
         "properties": {
             "id": {"dataType":"string","required":true},
             "type": {"dataType":"string","required":true},
-            "firstName": {"dataType":"string","required":true},
-            "lastName": {"dataType":"string","required":true},
-            "bloodType": {"dataType":"string","required":true},
-            "gender": {"dataType":"string","required":true},
-            "age": {"dataType":"double","required":true},
-            "race": {"dataType":"string","required":true},
+            "bloodPressure": {"dataType":"string","required":true},
+            "cholestrol": {"dataType":"string","required":true},
+            "glucose": {"dataType":"string","required":true},
+            "height": {"dataType":"double","required":true},
+            "weight": {"dataType":"double","required":true},
+            "doctor": {"dataType":"double","required":true},
         },
         "additionalProperties": false,
     },
@@ -34,17 +34,17 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "PatientCheckup": {
+    "PatientInfo": {
         "dataType": "refObject",
         "properties": {
             "id": {"dataType":"string","required":true},
             "type": {"dataType":"string","required":true},
-            "bloodPressure": {"dataType":"string","required":true},
-            "cholestrol": {"dataType":"string","required":true},
-            "glucose": {"dataType":"string","required":true},
-            "height": {"dataType":"double","required":true},
-            "weight": {"dataType":"double","required":true},
-            "doctor": {"dataType":"double","required":true},
+            "firstName": {"dataType":"string","required":true},
+            "lastName": {"dataType":"string","required":true},
+            "bloodType": {"dataType":"string","required":true},
+            "gender": {"dataType":"string","required":true},
+            "age": {"dataType":"double","required":true},
+            "race": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
     },
@@ -73,7 +73,7 @@ export function RegisterRoutes(app: express.Router) {
                 return next(err);
             }
 
-            const controller = new BCXExaMedical();
+            const controller = new PatientController();
 
 
             const promise = controller.Initialize.apply(controller, validatedArgs as any);
@@ -96,7 +96,7 @@ export function RegisterRoutes(app: express.Router) {
                 return next(err);
             }
 
-            const controller = new BCXExaMedical();
+            const controller = new PatientController();
 
 
             const promise = controller.Get.apply(controller, validatedArgs as any);
@@ -106,7 +106,7 @@ export function RegisterRoutes(app: express.Router) {
         app.post('/patient',
             function (request: any, response: any, next: any) {
             const args = {
-                    body: {"in":"body","name":"body","required":true,"dataType":"union","subSchemas":[{"ref":"PatientInfo"},{"ref":"PatientBase"},{"ref":"PatientCheckup"}]},
+                    body: {"in":"body","name":"body","required":true,"dataType":"union","subSchemas":[{"ref":"PatientCheckup"},{"ref":"PatientBase"},{"ref":"PatientInfo"}]},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -118,7 +118,7 @@ export function RegisterRoutes(app: express.Router) {
                 return next(err);
             }
 
-            const controller = new BCXExaMedical();
+            const controller = new PatientController();
 
 
             const promise = controller.Post.apply(controller, validatedArgs as any);

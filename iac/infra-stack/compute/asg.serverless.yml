@@ -133,7 +133,7 @@ Resources:
                 cd App
                 npm install --unsafe-perm
                 npm run build
-                cross-env NUXT_HOST=0.0.0.0 NUXT_PORT=3333 pm2 start
+                pm2 start
                 echo "Yay everything started"
                 INSTANCE_ID="`wget -q -O - http://instance-data/latest/meta-data/instance-id`" && \
                 aws autoscaling complete-lifecycle-action --lifecycle-action-result CONTINUE --instance-id $INSTANCE_ID --lifecycle-hook-name ${LIFECYCLE_HOOK_APP} --auto-scaling-group-name ${ASG_NAME_APP} --region ${REGION} || 

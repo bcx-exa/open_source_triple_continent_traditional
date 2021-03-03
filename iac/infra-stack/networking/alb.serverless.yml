@@ -57,9 +57,9 @@ Resources:
     Properties:
       HealthCheckEnabled: true
       HealthCheckPath: /
-      HealthCheckPort: 3333
+      HealthCheckPort: 7001
       HealthCheckProtocol: HTTP
-      Port: 3333
+      Port: 7001
       Name: ${self:service.name}-app-tg
       Protocol: HTTP
       TargetType: instance
