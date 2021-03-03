@@ -1,0 +1,44 @@
+Resources:
+  MyAccelerator:
+    Type: AWS::GlobalAccelerator::Accelerator
+    Properties:
+      Name: GlobalAccelerator
+      IpAddressType: IPV4
+      Enabled: true
+  MyListener:
+    Type: AWS::GlobalAccelerator::Listener
+    Properties:
+      AcceleratorArn: !Ref MyAccelerator
+      Protocol: TCP
+      ClientAffinity: SOURCE_IP
+      PortRanges:
+      - FromPort: 80
+        ToPort: 80
+      - FromPort: 443
+        ToPort: 443
+  BlueRegionA:
+    Type: AWS::GlobalAccelerator::EndpointGroup
+    Properties:
+      ListenerArn: !Ref MyListener
+      EndpointGroupRegion: ${env:BLUE_REGION_A}
+      EndpointConfigurations:
+        - EndpointId: ${cf.${env:BLUE_REGION_A}:${env:STAGE}-${env:BLUE_REGION_A}-${env:APP_NAME}-stack.WebAlb}
+          Weight: 100
+      HealthCheckPort: 443
+      HealthCheckProtocol: TCP
+      HealthCheckPath: “/”
+      ThresholdCount: 5
+      HealthCheckIntervalSeconds: 10
+  BlueRegionB:
+    Type: AWS::GlobalAccelerator::EndpointGroup
+    Properties:
+      ListenerArn: !Ref MyListener
+      EndpointGroupRegion: ${env:BLUE_REGION_B}
+      EndpointConfigurations:
+        - EndpointId: ${cf.${env:BLUE_REGION_B}:${env:STAGE}-${env:BLUE_REGION_B}-${env:APP_NAME}-stack.WebAlb}
+          Weight: 100
+      HealthCheckPort: 443
+      HealthCheckProtocol: TCP
+      HealthCheckPath: “/”
+      ThresholdCount: 5
+      HealthCheckIntervalSeconds: 10

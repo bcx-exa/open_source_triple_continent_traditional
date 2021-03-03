@@ -1,0 +1,22 @@
+{
+	"entryFile": "src/app.ts",
+	"noImplicitAdditionalProperties": "throw-on-extras",
+	"controllerPathGlobs": [
+		"src/controllers/*.ts"
+	],
+	"spec": {
+		"securityDefinitions": {
+			"jwt": {
+				"type": "apiKey",
+				"in": "header",
+				"name": "token"
+			}
+		},
+		"outputDirectory": "src/middleware/tsoa",
+		"specVersion": 3
+	},
+	"routes": {
+		"authenticationModule": "node_modules/bcx-eco-system-libary/dist/helpers/security/old/authenication.js",
+		"routesDir": "src/middleware/tsoa"
+	}
+}

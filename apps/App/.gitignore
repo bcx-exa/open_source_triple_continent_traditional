@@ -1,0 +1,18 @@
+# package directories
+node_modules
+jspm_packages
+.vscode
+
+coverage
+
+lib
+priv.pem
+# Serverless directories
+.serverless
+
+.env.local
+.env.*.local
+# Webpack directories
+.webpack
+
+dist

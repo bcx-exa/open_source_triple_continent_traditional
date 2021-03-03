@@ -1,0 +1,25 @@
+  Resources:
+    WebAlbCert:
+      Type: AWS::CertificateManager::Certificate
+      Properties:
+        DomainName: ${env:DOMAIN}
+        SubjectAlternativeNames:
+          - www.${env:DOMAIN}
+        DomainValidationOptions:
+          - DomainName: ${env:DOMAIN}
+            HostedZoneId: ${env:HOSTED_ZONE_ID}
+          - DomainName: www.${env:DOMAIN}
+            HostedZoneId: ${env:HOSTED_ZONE_ID}
+        ValidationMethod: DNS
+    AppAlbCert:
+      Type: AWS::CertificateManager::Certificate
+      Properties:
+        DomainName: ${env:APP_ALB_CNAME}
+        SubjectAlternativeNames:
+          - www.${env:APP_ALB_CNAME}
+        DomainValidationOptions:
+          - DomainName:  ${env:APP_ALB_CNAME}
+            HostedZoneId: ${env:HOSTED_ZONE_ID}
+          - DomainName:  www.${env:APP_ALB_CNAME}
+            HostedZoneId: ${env:HOSTED_ZONE_ID}
+        ValidationMethod: DNS

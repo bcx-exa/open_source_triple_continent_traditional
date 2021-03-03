@@ -1,0 +1,40 @@
+{
+  "name": "cross-region-active-active-iac",
+  "version": "0.0.1",
+  "description": "Base infrastructure",
+  "main": "src/app.ts",
+  "scripts": {
+    "deploy:dev:infra:blue-a": "cross-env NODE_ENV=dev-blue-a node iac/infra-stack/security/keypair.js && sls deploy --stage dev-blue-a --config iac/infra-stack/serverless.yml",
+    "deploy:dev:cicd:blue-a": "sls deploy --stage dev-blue-a --config iac/cicd-stack/serverless.yml",
+    "deploy:dev:infra:blue-b": "cross-env NODE_ENV=dev-blue-b node iac/infra-stack/security/keypair.js && sls deploy --stage dev-blue-b --config iac/infra-stack/serverless.yml",
+    "deploy:dev:cicd:blue-b": "sls deploy --stage dev-blue-b --config iac/cicd-stack/serverless.yml",
+    "deploy:dev:global": "sls deploy --stage dev-blue-a --config iac/global-stack/serverless.yml",
+    "destroy:dev:infra:blue-a": "cross-env NODE_ENV=dev-blue-a node iac/infra-stack/security/keypair.js && sls remove --stage dev-blue-a --config iac/infra-stack/serverless.yml",
+    "destroy:dev:cicd:blue-a": "sls remove --stage dev-blue-a --config iac/cicd-stack/serverless.yml",
+    "destroy:dev:infra:blue-b": "cross-env NODE_ENV=dev-blue-b node iac/infra-stack/security/keypair.js && sls remove --stage dev-blue-b --config iac/infra-stack/serverless.yml",
+    "destroy:dev:cicd:blue-b": "sls remove --stage dev-blue-b --config iac/cicd-stack/serverless.yml",
+    "destroy:dev:global": "sls remove --stage dev-blue-a --config iac/global-stack/serverless.yml",
+    "deploy:dev:blue-stack": "npm run deploy:dev:cicd:blue-a && npm run deploy:dev:infra:blue-a && npm run deploy:dev:cicd:blue-b && npm run deploy:dev:infra:blue-b && npm run deploy:dev:global",
+    "destroy:dev:blue-stack": "npm run destroy:dev:global && npm run destroy:dev:infra:blue-a && npm run destroy:dev:infra:blue-b && destroy:dev:cicd:blue-a && destroy:dev:cicd:blue-b",
+    "deploy:dev:green-stack": "npm run deploy:cicd:dev-eu-west-1"
+  },
+  "devDependencies": {
+    "serverless-bundle": "^4.1.0",
+    "serverless-domain-manager": "^5.1.0",
+    "serverless-dotenv-plugin": "^3.1.0",
+    "serverless-offline": "^6.8.0",
+    "serverless-plugin-cicd": "^0.1.1",
+    "serverless-plugin-scripts": "^1.0.2",
+    "serverless-pseudo-parameters": "^2.5.0"
+  },
+  "author": "Martin Greyling",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.789.0",
+    "dotenv-flow": "^3.2.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.5",
+    "request-promise-native": "^1.0.5",
+    "serverless-s3-remover": "^0.6.0"
+  }
+}

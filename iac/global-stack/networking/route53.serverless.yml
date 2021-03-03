@@ -1,0 +1,28 @@
+Resources:
+  subDomainWebsite:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId: ${env:HOSTED_ZONE_ID}
+      RecordSets:
+        - Name: ${env:DOMAIN}
+          Type: A
+          AliasTarget:
+            HostedZoneId: Z2BJ6XQ5FK7U4H #Special AWS id required for this to work
+            DNSName: !GetAtt "MyAccelerator.DnsName"
+        - Name: ${env:DOMAIN}
+          Type: AAAA
+          AliasTarget:
+            HostedZoneId: Z2BJ6XQ5FK7U4H #Special AWS id required for this to work
+            DNSName: !GetAtt "MyAccelerator.DnsName"
+        - Name: www.${env:DOMAIN}
+          Type: A
+          AliasTarget:
+            HostedZoneId: Z2BJ6XQ5FK7U4H #Special AWS id required for this to work
+            DNSName: !GetAtt "MyAccelerator.DnsName"
+        - Name: www.${env:DOMAIN}
+          Type: AAAA
+          AliasTarget:
+            HostedZoneId: Z2BJ6XQ5FK7U4H #Special AWS id required for this to work
+            DNSName: !GetAtt "MyAccelerator.DnsName"
+
+

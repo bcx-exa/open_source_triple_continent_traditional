@@ -1,0 +1,47 @@
+Resources:
+  Waf:
+    Type: AWS::WAFv2::WebACL
+    Properties:
+      Name: ${self:service.name}-waf
+      Scope: CLOUDFRONT
+      Description: Waf Used by Cloudfront
+      DefaultAction:
+        Allow: {}
+      VisibilityConfig:
+        SampledRequestsEnabled: true
+        CloudWatchMetricsEnabled: true
+        MetricName: ExampleWebACLMetric
+      Rules:
+        - Name: ${self:service.name}-waf
+          Priority: 0
+          OverrideAction:
+            Count: {}
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: RuleWithAWSManagedRulesMetric
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesCommonRuleSet
+              ExcludedRules: []
+        - Name: BlockXssAttack
+          Priority: 1
+          Action:
+            Block: {}
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: BlockXssAttackMetric
+          Statement:
+            XssMatchStatement:
+              FieldToMatch:
+                AllQueryArguments: {}
+              TextTransformations:
+                - Priority: 1
+                  Type: NONE
+Outputs:
+  Waf:
+    Value: !GetAtt Waf.Arn #!Select [1, !Split ["|", !Ref Waf]]
+    Export:
+      Name: ${self:service.name}-Waf

@@ -1,0 +1,11 @@
+Resources:
+  ElasticsearchLogs:
+    Type: AWS::Logs::LogGroup
+    Properties: 
+      LogGroupName: /aws/elasticsearch/${env:STAGE}-slow-search-log
+      RetentionInDays: 365
+  VPCFlowLogsGroup:
+    Type: AWS::Logs::LogGroup
+    Properties: 
+      LogGroupName: /aws/vpc/${env:STAGE}-flow-log
+      RetentionInDays: 365

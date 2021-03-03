@@ -1,0 +1,63 @@
+Resources:
+  Webhook: 
+    Type: AWS::CodePipeline::Webhook
+    Properties:
+      AuthenticationConfiguration: 
+        SecretToken: ${env:GITHUB_TOKEN}
+      Filters: 
+      - JsonPath: $.ref
+        MatchEquals: refs/tags/v* 
+      Authentication: GITHUB_HMAC 
+      TargetPipeline: !Ref CodePipeline
+      TargetAction: SourceAction
+      Name: ${self:service.name}-webhook
+      TargetPipelineVersion: !GetAtt CodePipeline.Version
+      RegisterWithThirdParty: true
+  CodePipeline: 
+    Type: AWS::CodePipeline::Pipeline 
+    Properties: 
+      RoleArn:
+        Fn::GetAtt:
+          - cicdRole
+          - Arn
+      Stages: 
+        - 
+          Name: Source 
+          Actions: 
+            - 
+              Name: SourceAction
+              ActionTypeId: 
+                Category: Source 
+                Owner: ThirdParty 
+                Version: 1 
+                Provider: GitHub 
+              OutputArtifacts: 
+                - 
+                  Name: ${self:service.name}
+              Configuration: 
+                Owner: ${env:GITHUB_OWNER}
+                Repo: ${env:GITHUB_REPO}
+                Branch: ${env:REPO_BRANCH}
+                OAuthToken: ${env:GITHUB_TOKEN}
+              RunOrder: 1 
+        - 
+          Name: Build
+          Actions: 
+            - 
+              Name: CodeBuild
+              InputArtifacts: 
+                -
+                  Name: ${self:service.name}
+              ActionTypeId: 
+                Category: Build
+                Owner: AWS 
+                Version: 1 
+                Provider: CodeBuild
+              Configuration: 
+                ProjectName: 
+                  Ref: CodeBuild
+              RunOrder: 1 
+      ArtifactStore: 
+        Type: S3 
+        Location:
+          Ref: ServerlessDeploymentBucket

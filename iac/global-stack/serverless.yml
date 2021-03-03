@@ -1,0 +1,26 @@
+service:
+  name: ${env:STAGE}-${self:provider.region}-${env:APP_NAME}
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-plugin-scripts
+custom:
+  scripts:
+    hooks:
+      "deploy:finalize": >
+        aws dynamodb create-global-table --global-table-name ${env:DB_TABLE_NAME} --replication-group RegionName=${env:BLUE_REGION_A} RegionName=${env:BLUE_REGION_B} --region ${env:BLUE_REGION_A} --profile ${env:AWS_PROFILE}      
+  dotenv:
+    basePath: environments/
+    exclude: # By default dotenv will add the env to your functions
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+provider:
+  name: aws
+  region: ${env:REGION}
+  stage: ${env:STAGE, 'dev'}
+  stackName: ${self:service.name}-global-stack
+  profile: ${env:AWS_PROFILE}
+
+resources:
+  - Resources:
+  - ${file(iac/global-stack/networking/gbacc.serverless.yml)}
+  - ${file(iac/global-stack/networking/route53.serverless.yml)}

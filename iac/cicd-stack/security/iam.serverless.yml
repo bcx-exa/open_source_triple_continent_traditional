@@ -1,0 +1,35 @@
+Resources:
+  cicdRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      RoleName: ${env:APP_NAME}-${env:STAGE}-${env:REGION}-cicd-Role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - codebuild.amazonaws.com
+                - codepipeline.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: ${env:APP_NAME}-${env:STAGE}-Policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "*"
+                  # - "rds:*"
+                  # - "rds-data:*"
+                  # - "ec2:*"
+                  # - "cloudwatch:*"
+                  # - "cloudtrail:*"
+                  # - "elastic"
+                  # - "sns:*"
+                  # - "ses:*"
+                  # - "xray:*"
+                  # - "cloudformation:*"
+                Resource:
+                  - "*"

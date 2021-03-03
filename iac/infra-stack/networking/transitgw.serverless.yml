@@ -1,0 +1,26 @@
+Resources:
+  TransitGateway:
+    Type: "AWS::EC2::TransitGateway"
+    Properties:
+      AmazonSideAsn: ${env:ASN}
+      Description: "TGW Route Integration Test"
+      AutoAcceptSharedAttachments: "disable"
+      DefaultRouteTableAssociation: "enable"
+      DnsSupport: "enable"
+      VpnEcmpSupport: "enable"
+      Tags:
+      - Key: Application
+        Value: !Ref 'AWS::StackId'
+  TransitGatewayAttach:
+    Type: AWS::EC2::TransitGatewayAttachment
+    Properties:
+      SubnetIds:
+        - Ref: WebSubAz1
+        - Ref: WebSubAz2
+        - Ref: WebSubAz3
+      Tags:
+        - Key: Name
+          Value: TransitGatewayAttach
+      TransitGatewayId: !Ref TransitGateway
+      VpcId:
+        Ref: Vpc

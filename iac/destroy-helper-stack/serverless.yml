@@ -1,0 +1,23 @@
+service:
+  name: ${env:STAGE}-${self:provider.region}-${env:APP_NAME}
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-plugin-scripts
+custom:
+  scripts:
+    hooks:
+      "deploy:deploy": >
+        aws s3 rb s3://${env:APP_S3_BUCKET} --force --profile ${env:AWS_PROFILE} &&
+        aws s3 rb s3://${env:WEB_S3_BUCKET} --force --profile ${env:AWS_PROFILE}
+  dotenv:
+    basePath: environments/
+    exclude: # By default dotenv will add the env to your functions
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+provider:
+  name: aws
+  region: ${env:REGION}
+  stage: ${env:STAGE, 'dev'}
+  stackName: ${self:service.name}-destroy-helper-stack
+  profile: ${env:AWS_PROFILE}
+

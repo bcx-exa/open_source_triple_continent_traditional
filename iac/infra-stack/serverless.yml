@@ -1,0 +1,42 @@
+service:
+  name: ${env:STAGE}-${env:REGION}-${env:APP_NAME}
+custom:
+  dotenv:
+    basePath: environments/
+    exclude: # By default dotenv will add the env to your functions
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEYS
+
+plugins:
+  - serverless-dotenv-plugin
+
+provider:
+  name: aws
+  region: ${env:REGION, 'eu-west-1'}
+  stage: ${env:STAGE, 'dev'}
+  stackName: ${self:service.name}-stack
+  runtime: nodejs12.x
+  profile: ${env:AWS_PROFILE}
+  role: baseRole
+  logRetentionInDays: 365
+resources:
+  - Resources:
+  # Security
+  - ${file(iac/infra-stack/security/iam.serverless.yml)}
+  - ${file(iac/infra-stack/security/acm.serverless.yml)}
+  # Networking
+  - ${file(iac/infra-stack/networking/vpc.serverless.yml)}
+  - ${file(iac/infra-stack/networking/subnet.serverless.yml)}
+  - ${file(iac/infra-stack/networking/gateways.serverless.yml)}
+  - ${file(iac/infra-stack/networking/routes.serverless.yml)}
+  - ${file(iac/infra-stack/networking/route53.serverless.yml)}
+  - ${file(iac/infra-stack/networking/sg.serverless.yml)}
+  - ${file(iac/infra-stack/networking/alb.serverless.yml)}
+  - ${file(iac/infra-stack/networking/transitgw.serverless.yml)}
+  # Compute
+  - ${file(iac/infra-stack/compute/asg.serverless.yml)}
+  # Database
+  - ${file(iac/infra-stack/database/dynamodb.serverless.yml)}
+  # Monitoring
+  - ${file(iac/infra-stack/monitoring/cloudwatch.serverless.yml)}
+  # - ${file(iac/infra-stack/monitoring/aws-config.serverless.yml)}

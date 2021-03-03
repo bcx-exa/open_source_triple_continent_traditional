@@ -1,0 +1,79 @@
+Resources:
+  baseRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      RoleName: ${env:APP_NAME}-${env:STAGE}-${env:REGION}-Base-Role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - apigateway.amazonaws.com
+                - lambda.amazonaws.com
+                - codebuild.amazonaws.com
+                - codepipeline.amazonaws.com
+                - cloudwatch.amazonaws.com
+                - vpc-flow-logs.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: ${env:APP_NAME}-${env:STAGE}-Policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "*"
+                  # - "rds:*"
+                  # - "rds-data:*"
+                  # - "ec2:*"
+                  # - "cloudwatch:*"
+                  # - "cloudtrail:*"
+                  # - "elastic"
+                  # - "sns:*"
+                  # - "ses:*"
+                  # - "xray:*"
+                  # - "cloudformation:*"
+                Resource:
+                  - "*"
+  ec2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      RoleName: ${env:APP_NAME}-${env:STAGE}-${env:REGION}-EC2-Role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: ${env:APP_NAME}-${env:STAGE}-${env:REGION}-Policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "*"
+                  # - "rds:*"
+                  # - "rds-data:*"
+                  # - "ec2:*"
+                  # - "cloudwatch:*"
+                  # - "cloudtrail:*"
+                  # - "elastic"
+                  # - "sns:*"
+                  # - "ses:*"
+                  # - "xray:*"
+                  # - "cloudformation:*"
+                Resource:
+                  - "*"
+  ec2RoleInstanceProfile: 
+    Type: "AWS::IAM::InstanceProfile"
+    Properties: 
+      Path: "/"
+      Roles: 
+        - 
+          Ref: "ec2Role"

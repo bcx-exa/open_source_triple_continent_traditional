@@ -1,0 +1,115 @@
+Resources:
+  #Create Security Groups
+  WebAlbSg:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Inbound and Outbound Rules for Web ALB
+      VpcId:
+        Ref: Vpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: WebAlbSg
+        - Key: Security group name
+          Value: WebAlbSg
+  AppAlbSg:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Inbound and Outbound Rules for App ALB
+      VpcId:
+        Ref: Vpc
+      Tags:
+        - Key: Name
+          Value: AppAlbSg
+        - Key: Security group name
+          Value: AppAlbSg
+  WebSg:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Inbound and Outbound Rules for Web Servers
+      VpcId:
+        Ref: Vpc
+      Tags:
+        - Key: Name
+          Value: WebSg
+        - Key: Security group name
+          Value: WebSg  
+      SecurityGroupIngress: # This is just to test, remove this, you should connect through bastion hosts to get to your webservers in prod
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+  AppSg:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Inbound and Outbound Rules for App Servers
+      VpcId:
+        Ref: Vpc
+      Tags:
+        - Key: Name
+          Value: AppSg
+        - Key: Security group name
+          Value: AppSg
+  # Web Server Rules
+  WebAlbToWebSg:
+    DependsOn: WebSg
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId:
+        Ref: WebSg
+      IpProtocol: tcp
+      FromPort: 3333
+      ToPort: 3333
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - WebAlbSg
+          - GroupId
+  # App ALB Server Rules
+  WebSgToAppAlbSg:
+    DependsOn: AppAlbSg
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId:
+        Ref: AppAlbSg
+      IpProtocol: tcp
+      FromPort: 443
+      ToPort: 443
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - WebSg
+          - GroupId
+  # App Server Rules
+  AppAlbToAppSg:
+    DependsOn: AppSg
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId:
+        Ref: AppSg
+      IpProtocol: tcp
+      FromPort: 3333
+      ToPort: 3333
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - AppAlbSg
+          - GroupId
+Outputs:
+  WebSg:
+    Description: Web Security Group Logical ID
+    Value:
+      Ref: WebSg
+    Export:
+      Name: WebSg
+  AppSg:
+    Description: App Security Group Logical ID
+    Value:
+      Ref: AppSg
+    Export:
+      Name: AppSg

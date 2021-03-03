@@ -1,0 +1,30 @@
+Resources:
+  subDomainWebsite:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId: ${env:HOSTED_ZONE_ID}
+      RecordSets:
+        - Name: ${env:APP_ALB_CNAME}
+          Type: A
+          AliasTarget:
+            HostedZoneId: ${env:ALB_HOSTED_ZONE} #Special AWS id required for this to work
+            DNSName: !GetAtt "AppAlb.DNSName"
+        - Name: ${env:APP_ALB_CNAME}
+          Type: AAAA
+          AliasTarget:
+            HostedZoneId: ${env:ALB_HOSTED_ZONE} #Special AWS id required for this to work
+            DNSName: !GetAtt "AppAlb.DNSName"
+        - Name: www.${env:APP_ALB_CNAME}
+          Type: A
+          AliasTarget:
+            HostedZoneId: ${env:ALB_HOSTED_ZONE} #Special AWS id required for this to work
+            DNSName: !GetAtt "AppAlb.DNSName"
+        - Name: www.${env:APP_ALB_CNAME}
+          Type: AAAA
+          AliasTarget:
+            HostedZoneId: ${env:ALB_HOSTED_ZONE} #Special AWS id required for this to work
+            DNSName: !GetAtt "AppAlb.DNSName"
+
+
+
+

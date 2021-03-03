@@ -1,0 +1,34 @@
+service:
+  name: ${env:STAGE}-${self:provider.region}-${env:APP_NAME}
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-plugin-scripts
+  - serverless-s3-remover
+custom:
+  remover:
+    buckets:
+      - ${env:WEB_S3_BUCKET}
+      - ${env:APP_S3_BUCKET}
+  scripts:
+    hooks:
+      "deploy:finalize": >
+        aws s3 sync apps/Web s3://${env:WEB_S3_BUCKET}/App --profile ${env:AWS_PROFILE} --exclude /*/*/node_modules/* --delete &&
+        aws s3 sync apps/APP s3://${env:APP_S3_BUCKET}/App --profile ${env:AWS_PROFILE} --exclude /*/*/node_modules/* --delete
+  dotenv:
+    basePath: environments/
+    exclude: # By default dotenv will add the env to your functions
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+provider:
+  name: aws
+  region: ${env:REGION}
+  stage: ${env:STAGE, 'dev'}
+  stackName: ${self:service.name}-cicd-stack
+  profile: ${env:AWS_PROFILE}
+
+resources:
+  - Resources:
+  - ${file(iac/cicd-stack/security/iam.serverless.yml)}
+  - ${file(iac/cicd-stack/storage/s3.serverless.yml)}
+  - ${file(iac/cicd-stack/cicd/codebuild.serverless.yml)}
+  - ${file(iac/cicd-stack/cicd/codepipeline.serverless.yml)}
