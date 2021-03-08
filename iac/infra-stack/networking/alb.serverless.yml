@@ -7,7 +7,7 @@ Resources:
       HealthCheckPort: 3333
       HealthCheckProtocol: HTTP
       Port: 3333
-      Name: ${self:service.name}-web-tg
+      Name: ${env:REGION}-web-tg
       Protocol: HTTP
       TargetType: instance
       VpcId: !Ref Vpc
@@ -60,7 +60,7 @@ Resources:
       HealthCheckPort: 7001
       HealthCheckProtocol: HTTP
       Port: 7001
-      Name: ${self:service.name}-app-tg
+      Name: ${env:REGION}-app-tg
       Protocol: HTTP
       TargetType: instance
       VpcId: !Ref Vpc

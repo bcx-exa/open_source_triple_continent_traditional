@@ -30,6 +30,7 @@
     "aws-xray-sdk-express": "^3.2.0",
     "axios": "^0.21.0",
     "bcx-eco-system-libary": "0.0.73",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "dotenv-flow": "^3.2.0",
     "express": "^4.17.1",

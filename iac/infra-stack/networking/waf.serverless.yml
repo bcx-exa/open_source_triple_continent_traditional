@@ -2,7 +2,7 @@ Resources:
   Waf:
     Type: AWS::WAFv2::WebACL
     Properties:
-      Name: ${self:service.name}-waf
+      Name: ${env:REGION}-waf
       Scope: CLOUDFRONT
       Description: Waf Used by Cloudfront
       DefaultAction:
@@ -12,7 +12,7 @@ Resources:
         CloudWatchMetricsEnabled: true
         MetricName: ExampleWebACLMetric
       Rules:
-        - Name: ${self:service.name}-waf
+        - Name: ${env:REGION}-waf
           Priority: 0
           OverrideAction:
             Count: {}
@@ -40,8 +40,13 @@ Resources:
               TextTransformations:
                 - Priority: 1
                   Type: NONE
+  WAFAssociation:
+    Type: 'AWS::WAFv2::WebACLAssociation'
+    Properties:
+      WebACLArn: !Fn::GetAtt Waf.Arn
+      ResourceArn: !Ref WebAlb
 Outputs:
   Waf:
     Value: !GetAtt Waf.Arn #!Select [1, !Split ["|", !Ref Waf]]
     Export:
-      Name: ${self:service.name}-Waf
+      Name: ${env:REGION}-Waf

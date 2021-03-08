@@ -16,26 +16,39 @@ Resources:
         ToPort: 80
       - FromPort: 443
         ToPort: 443
-  BlueRegionA:
+  Ireland:
     Type: AWS::GlobalAccelerator::EndpointGroup
     Properties:
       ListenerArn: !Ref MyListener
-      EndpointGroupRegion: ${env:BLUE_REGION_A}
+      EndpointGroupRegion: ${env:IRELAND}
       EndpointConfigurations:
-        - EndpointId: ${cf.${env:BLUE_REGION_A}:${env:STAGE}-${env:BLUE_REGION_A}-${env:APP_NAME}-stack.WebAlb}
+        - EndpointId: ${cf.${env:IRELAND}:${env:STAGE}-${env:IRELAND}-${env:APP_NAME}-stack.WebAlb}
           Weight: 100
       HealthCheckPort: 443
       HealthCheckProtocol: TCP
       HealthCheckPath: “/”
       ThresholdCount: 5
       HealthCheckIntervalSeconds: 10
-  BlueRegionB:
+  Oregon:
     Type: AWS::GlobalAccelerator::EndpointGroup
     Properties:
       ListenerArn: !Ref MyListener
-      EndpointGroupRegion: ${env:BLUE_REGION_B}
+      EndpointGroupRegion: ${env:OREGON}
       EndpointConfigurations:
-        - EndpointId: ${cf.${env:BLUE_REGION_B}:${env:STAGE}-${env:BLUE_REGION_B}-${env:APP_NAME}-stack.WebAlb}
+        - EndpointId: ${cf.${env:OREGON}:${env:STAGE}-${env:OREGON}-${env:APP_NAME}-stack.WebAlb}
+          Weight: 100
+      HealthCheckPort: 443
+      HealthCheckProtocol: TCP
+      HealthCheckPath: “/”
+      ThresholdCount: 5
+      HealthCheckIntervalSeconds: 10
+  Sydney:
+    Type: AWS::GlobalAccelerator::EndpointGroup
+    Properties:
+      ListenerArn: !Ref MyListener
+      EndpointGroupRegion: ${env:SYDNEY}
+      EndpointConfigurations:
+        - EndpointId: ${cf.${env:SYDNEY}:${env:STAGE}-${env:SYDNEY}-${env:APP_NAME}-stack.WebAlb}
           Weight: 100
       HealthCheckPort: 443
       HealthCheckProtocol: TCP

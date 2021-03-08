@@ -14,6 +14,7 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "id": {"dataType":"string","required":true},
+            "version": {"dataType":"string","required":true},
             "type": {"dataType":"string","required":true},
             "bloodPressure": {"dataType":"string","required":true},
             "cholestrol": {"dataType":"string","required":true},
@@ -29,6 +30,7 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "id": {"dataType":"string","required":true},
+            "version": {"dataType":"string","required":true},
             "type": {"dataType":"string","required":true},
         },
         "additionalProperties": false,
@@ -38,10 +40,11 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "id": {"dataType":"string","required":true},
+            "version": {"dataType":"string","required":true},
             "type": {"dataType":"string","required":true},
             "firstName": {"dataType":"string","required":true},
             "lastName": {"dataType":"string","required":true},
-            "bloodType": {"dataType":"string","required":true},
+            "bloodTypes": {"dataType":"string","required":true},
             "gender": {"dataType":"string","required":true},
             "age": {"dataType":"double","required":true},
             "race": {"dataType":"string","required":true},
@@ -84,7 +87,7 @@ export function RegisterRoutes(app: express.Router) {
             function (request: any, response: any, next: any) {
             const args = {
                     id: {"in":"query","name":"id","required":true,"dataType":"string"},
-                    type: {"in":"query","name":"type","required":true,"dataType":"string"},
+                    version: {"in":"query","name":"version","required":true,"dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

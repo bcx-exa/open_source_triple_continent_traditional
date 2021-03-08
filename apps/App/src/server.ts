@@ -9,6 +9,7 @@ import * as path from "path";
 import * as fs from "fs";
 import * as AWS from "aws-sdk";
 import { ValidateError } from "tsoa";
+import cors from 'cors';
 export class Server {
   public app: any;
 
@@ -52,6 +53,9 @@ export class Server {
     //X-ray Segment Start
     const appName = process.env.APP_NAME || "micro-base";
     this.app.use(xrayExpress.openSegment(appName + "-startup"));
+
+    // Cors
+    this.app.use(cors());
 
     const routes = await import("./middleware/tsoa/routes");
     routes.RegisterRoutes(this.app);

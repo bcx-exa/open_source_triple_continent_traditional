@@ -27,12 +27,11 @@ export class PatientController extends Controller {
     return new Patient().Initialize();
   }
   @Get("/")
-  async Get(@Query() id: string, @Query() type: string): Promise<any> {
-    return new Patient().Read(id, type);
+  async Get(@Query() id: string, @Query() version: string): Promise<any> {
+    return new Patient().Read(id, version);
   }
   @Post("/")
   async Post(@Body() body: PatientCheckup | PatientBase | PatientInfo ): Promise<any> {
     return new Patient().Create(body);
   }
-
 }

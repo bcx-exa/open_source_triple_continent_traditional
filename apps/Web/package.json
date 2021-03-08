@@ -22,6 +22,8 @@
   "author": "BCX Exa",
   "license": "MIT",
   "dependencies": {
+    "@nuxt/http": "^0.6.4",
+    "@nuxtjs/proxy": "^2.1.0",
     "@nuxtjs/vuetify": "^1.11.2",
     "aws-sdk": "^2.820.0",
     "aws-serverless-express": "^3.4.0",

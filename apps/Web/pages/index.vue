@@ -1,111 +1,210 @@
 <template>
   <div>
-    <h1 class="pl-4 pb-4">BCX Exa Medical</h1>
-    <h3 class="pl-4">
-      You are being served by the
-      <span color="primary--text">
-        {{ $config.REGION === 'eu-west-1' ? 'BLUE STACK' : 'GREEN STACK' }}
-      </span>
-      in region: {{ $config.REGION }}
-    </h3>
+    <v-alert
+      v-model="alert"
+      border="left"
+      close-text="Close Alert"
+      color="success"
+      dismissible
+    >
+      {{ alertMessage }}
+    </v-alert>
+    <div class="pa-4">
+      <h1 class="pl-4 pb-4">BCX Exa Medical</h1>
+      <h3 class="pl-4 mb-2">
+        You are being served by the
+        <span color="primary--text">
+          {{
+            $config.REGION === 'eu-west-1'
+              ? 'IRELAND REGION'
+              : $config.REGION === 'us-west-2'
+              ? 'OREGON REGION'
+              : 'SYDNEY REGION'
+          }}
+        </span>
+      </h3>
 
-    <v-col cols="12" sm="12" md="12">
-      <v-row>
-        <v-card-title>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            class="pr-1"
-            label="Search"
-            single-line
-            hide-details
-          ></v-text-field>
-        </v-card-title>
-        <v-btn class="mt-8 ml-2" color="primary" elevation="2"> Search </v-btn>
-        <v-spacer></v-spacer>
-        <v-btn class="mt-8 ml-2" color="success" elevation="2"> Create </v-btn>
-        <v-btn class="mt-8 ml-2" color="info" elevation="2"> Initialize </v-btn>
-      </v-row>
-    </v-col>
+      <!-- Toolbar -->
+      <v-toolbar dense class="mb-2">
+        <v-text-field
+          v-model="search"
+          label="Search"
+          class="ml-2"
+          single-line
+          hide-details
+        ></v-text-field>
 
-    <v-card>
-      <v-card-title>Patient Info:</v-card-title>
-      <v-data-table
-        :headers="patientInfoHeaders"
-        :items="patientInfo"
-        hide-default-footer
-      ></v-data-table>
-    </v-card>
-    <v-card>
-      <v-card-title>Patient History:</v-card-title>
-      <v-data-table
-        dense
-        :headers="patientHistoryHeaders"
-        :items="patientHistory"
-        item-key="name"
-        class="pa-2 elevation-1"
-        hide-default-footer
-      ></v-data-table>
-    </v-card>
+        <v-btn
+          @click="getPatient()"
+          fab
+          small
+          class="ml-2"
+          color="primary"
+          elevation="2"
+        >
+          <v-icon dark> mdi-magnify </v-icon>
+        </v-btn>
+
+        <v-btn
+          @click="dialog = !dialog"
+          fab
+          small
+          color="success"
+          class="ml-2"
+          elevation="2"
+        >
+          <v-icon dark> mdi-plus </v-icon>
+        </v-btn>
+        <v-btn
+          @click="initialize()"
+          fab
+          small
+          class="ml-2"
+          color="info lighten-1"
+          elevation="2"
+        >
+          <v-icon dark> mdi-database-arrow-down </v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-card class="pa-2">
+        <v-card-title>Patient Info:</v-card-title>
+        <v-data-table
+          :loading="loading"
+          loading-text="Loading... Please wait"
+          class="pa-2"
+          :headers="patientInfoHeaders"
+          :items="patientInfo"
+          hide-default-footer
+        ></v-data-table>
+      </v-card>
+      <v-card>
+        <v-card-title>Patient History:</v-card-title>
+        <v-data-table
+          :loading="loading"
+          loading-text="Loading... Please wait"
+          dense
+          :headers="patientHistoryHeaders"
+          :items="patientHistory"
+          item-key="name"
+          class="pa-2 elevation-1"
+          hide-default-footer
+        ></v-data-table>
+      </v-card>
+    </div>
+    <v-row justify="center">
+      <v-dialog v-model="dialog" persistent max-width="600px">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Patient Record</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field
+                    label="Identity Number*"
+                    v-model="newPatient.id"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field
+                    label="version*"
+                    v-model="newPatient.version"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field
+                    label="Type*"
+                    v-model="newPatient.type"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="12" md="12">
+                  <v-text-field
+                    label="First Name*"
+                    v-model="newPatient.firstName"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    label="Last Name*"
+                    v-model="newPatient.lastName"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    label="Gender*"
+                    v-model="newPatient.gender"
+                    required
+                  ></v-text-field>
+                </v-col>
+
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    label="Age*"
+                    v-model="newPatient.age"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    label="Race*"
+                    v-model="newPatient.race"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    label="Blood Type*"
+                    v-model="newPatient.bloodTypes"
+                    required
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+            <small>*indicates required field</small>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="dialog = false">
+              Close
+            </v-btn>
+            <v-btn color="blue darken-1" text @click="createPatient()">
+              Save
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </div>
 </template>
 
 <script>
 export default {
-  async asyncData({ params, $http }) {
-    const post = await $http.$get(
-      process.env.APP_ALB_CNAME || 'http://localhost:7001' + '/patient/' + id
-    )
-    return { post }
-  },
   data: () => ({
-    getPatient: process.env.APP_ALB_CNAME || 'http://localhost:7001',
+    alert: false,
+    dialog: false,
+    response: '',
     search: '',
-    patientInfo: [
-      {
-        id: '123',
-        firstName: 'Sally',
-        lastName: 'Johnson',
-        gender: 'Female',
-        age: 23,
-        race: 'White',
-        bloodType: 'O+',
-      },
-    ],
-    patientHistory: [
-      {
-        bloodPressure: '120/80',
-        time: Date.now(),
-        cholesterol: '3.5',
-        glucose: '170mg',
-        height: 23,
-        weight: 50,
-        doctor: 'Dr House',
-        region: 'eu-west-1',
-        stack: 'Blue Stack',
-      },
-      {
-        bloodPressure: '110/70',
-        time: Date.now(),
-        cholesterol: '6.5',
-        glucose: '170mg',
-        height: 23,
-        weight: 55,
-        doctor: 'Dr House',
-        region: 'eu-west-1',
-        stack: 'Blue Stack',
-      },
-      {
-        bloodPressure: '130/90',
-        time: Date.now(),
-        cholesterol: '4.5',
-        glucose: '170mg',
-        height: 23,
-        weight: 75,
-        doctor: 'Dr House',
-        region: 'us-west-2',
-        stack: 'Green Stack',
-      },
+    loading: false,
+    alertMessage: '',
+    type: 'info',
+    patientInfo: [],
+    newPatient: {},
+    patientHistory: [],
+    patientHistoryHeaders: [
+      { text: 'Version', value: 'version' },
+      { text: 'Blood Pressure', value: 'bloodPressure' },
+      { text: 'Time', value: 'time' },
+      { text: 'Cholesterol', value: 'cholestrol' },
+      { text: 'Glucose', value: 'glucose' },
+      { text: 'Height (cm)', value: 'height' },
+      { text: 'Weight (Kg)', value: 'weight' },
+      { text: 'Doctor', value: 'doctor' },
     ],
     patientInfoHeaders: [
       { text: 'Identity Number', value: 'id' },
@@ -114,20 +213,57 @@ export default {
       { text: 'Gender', value: 'gender' },
       { text: 'Age', value: 'age' },
       { text: 'Race', value: 'race' },
-      { text: 'Blood Type', value: 'bloodType' },
-    ],
-    patientHistoryHeaders: [
-      { text: 'Blood Pressure', value: 'bloodPressure' },
-      { text: 'Time', value: 'time' },
-      { text: 'Cholesterol', value: 'cholesterol' },
-      { text: 'Glucose', value: 'glucose' },
-      { text: 'Height (cm)', value: 'height' },
-      { text: 'Weight (Kg)', value: 'weight' },
-      { text: 'Doctor', value: 'doctor' },
-      { text: 'Region', value: 'region' },
-      { text: 'Stack', value: 'stack' },
+      { text: 'Blood Type', value: 'bloodTypes' },
     ],
   }),
+  methods: {
+    async initialize() {
+      this.$http.setHeader('Access-Control-Allow-Origin', '*')
+      this.$http.setHeader('Origin', '*')
+      const response = await this.$http.$post(
+        process.env.APP_ALB + '/patient/initialize'
+      )
+
+      this.alertMessage = 'Database populated with dummy data'
+      this.alert = true
+      setTimeout(() => {
+        this.alert = false
+      }, 3000)
+      this.response = response
+    },
+    async getPatient() {
+      this.$http.setHeader('Access-Control-Allow-Origin', '*')
+      this.$http.setHeader('Origin', '*')
+      this.loading = true
+
+      const info = await this.$http.$get(
+        process.env.APP_ALB + '/patient?id=' + this.search + '&version=MetaData'
+      )
+
+      const history = await this.$http.$get(
+        process.env.APP_ALB + '/patient?id=' + this.search + '&version=v'
+      )
+
+      this.loading = false
+      this.patientInfo = info.Items
+      this.patientHistory = history.Items
+    },
+    async createPatient() {
+      this.$http.setHeader('Access-Control-Allow-Origin', '*')
+      this.$http.setHeader('Origin', '*')
+      const response = await this.$http.$post(
+        process.env.APP_ALB + '/patient',
+        this.newPatient
+      )
+
+      this.dialog = false
+      this.alertMessage = 'Patient Created'
+      this.alert = true
+      setTimeout(() => {
+        this.alert = false
+      }, 3000)
+    },
+  },
 }
 </script>
 

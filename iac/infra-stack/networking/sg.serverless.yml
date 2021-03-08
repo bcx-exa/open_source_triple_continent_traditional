@@ -94,8 +94,8 @@ Resources:
       GroupId:
         Ref: AppSg
       IpProtocol: tcp
-      FromPort: 3333
-      ToPort: 3333
+      FromPort: 7001
+      ToPort: 7001
       SourceSecurityGroupId:
         Fn::GetAtt:
           - AppAlbSg

@@ -1,5 +1,5 @@
 {
-  "exec": "cross-env RUN_LOCAL=true NODE_ENV=dev-blue-a ts-node src/app.ts",
+  "exec": "cross-env RUN_LOCAL=true NODE_ENV=ireland ts-node src/app.ts",
   "restartable": true,
   "execMap": {
     "ts": "node --require ts-node/register"

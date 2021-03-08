@@ -1,4 +1,5 @@
 import AWS from "aws-sdk";
+import { PatientCheckup } from "../types/patient";
 AWS.config.update({region: process.env.REGION});
 const dynamoDb = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
@@ -26,6 +27,7 @@ export class Patient {
       // Create patient info record
       const patientInfo = {
         id: ids[i],
+        version: 'MetaData',
         type: 'info',
         time: Date.now(),
         firstName: firstNames[Math.floor(Math.random() * firstNames.length)],
@@ -35,18 +37,6 @@ export class Patient {
         race: races[Math.floor(Math.random() * races.length)],
         bloodTypes: bloodTypes[Math.floor(Math.random() * bloodTypes.length)],
       };
-      // Create patient history
-      const patientHistory = {
-        id: patientInfo.id,
-        type: 'check-up',
-        time: Date.now(),
-        bloodPressure: bloodPressures[Math.floor(Math.random() * bloodPressures.length)],
-        cholestrol: cholestrols[Math.floor(Math.random() * cholestrols.length)],
-        glucose: glucoses[Math.floor(Math.random() * glucoses.length)],
-        height: heights[Math.floor(Math.random() * heights.length)],
-        weight: weights[Math.floor(Math.random() * weights.length)],
-        doctor: doctors[Math.floor(Math.random() * doctors.length)],
-      };
 
       // Save to DB
       const params1 = {
@@ -54,20 +44,50 @@ export class Patient {
         Item: patientInfo
       };
 
-      const params2 = {
-        TableName : process.env.DB_TABLE_NAME,
-        Item: patientHistory
-      };
-  
       dynamoDb.put(params1, function(err, data) {
         if (err) console.log(err);
         else console.log(data);
       });
 
-      dynamoDb.put(params2, function(err, data) {
-        if (err) console.log(err);
-        else console.log(data);
-      });
+      // Create patient history
+      for(let p = 1; p < 6; p++) {
+        const patientHistory = {
+          id: patientInfo.id,
+          version: 'v' + p,
+          type: 'check-up',
+          time: Date.now(),
+          bloodPressure: bloodPressures[Math.floor(Math.random() * bloodPressures.length)],
+          cholestrol: cholestrols[Math.floor(Math.random() * cholestrols.length)],
+          glucose: glucoses[Math.floor(Math.random() * glucoses.length)],
+          height: heights[Math.floor(Math.random() * heights.length)],
+          weight: weights[Math.floor(Math.random() * weights.length)],
+          doctor: doctors[Math.floor(Math.random() * doctors.length)],
+        };
+
+        const params2 = {
+          TableName : process.env.DB_TABLE_NAME,
+          Item: patientHistory
+        };
+    
+        dynamoDb.put(params2, function(err, data) {
+          if (err) console.log(err);
+          else console.log(data);
+        });
+
+        if(patientHistory.version === 'v5') {
+          patientHistory.version = 'v0';
+
+          const params2 = {
+            TableName : process.env.DB_TABLE_NAME,
+            Item: patientHistory
+          };
+      
+          dynamoDb.put(params2, function(err, data) {
+            if (err) console.log(err);
+            else console.log(data);
+          })
+        }
+      }
     }
 
     return 'Initialized';
@@ -88,13 +108,17 @@ export class Patient {
 
     return 'Data Saved';
   }
-  public async Read(id, type) {  
+  public async Read(id, version) {  
     // Save to DB
     const params1 = {
       TableName : process.env.DB_TABLE_NAME,
-      Key: { id: id, type: type }
+      KeyConditionExpression: 'id = :id and begins_with (version, :version)',
+      ExpressionAttributeValues: {
+        ':id': id,
+        ':version': version
+      }
     };
     
-    return await dynamoDb.get(params1).promise();
+    return await dynamoDb.query(params1).promise();
   }
 }

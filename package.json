@@ -1,40 +1,39 @@
 {
-  "name": "cross-region-active-active-iac",
+  "name": "triple-continent-deployment",
   "version": "0.0.1",
-  "description": "Base infrastructure",
+  "description": "Demo to showcase a multi-region active-active deployment using one command",
   "main": "src/app.ts",
   "scripts": {
-    "deploy:dev:infra:blue-a": "cross-env NODE_ENV=dev-blue-a node iac/infra-stack/security/keypair.js && sls deploy --stage dev-blue-a --config iac/infra-stack/serverless.yml",
-    "deploy:dev:cicd:blue-a": "sls deploy --stage dev-blue-a --config iac/cicd-stack/serverless.yml",
-    "deploy:dev:infra:blue-b": "cross-env NODE_ENV=dev-blue-b node iac/infra-stack/security/keypair.js && sls deploy --stage dev-blue-b --config iac/infra-stack/serverless.yml",
-    "deploy:dev:cicd:blue-b": "sls deploy --stage dev-blue-b --config iac/cicd-stack/serverless.yml",
-    "deploy:dev:global": "sls deploy --stage dev-blue-a --config iac/global-stack/serverless.yml",
-    "destroy:dev:infra:blue-a": "cross-env NODE_ENV=dev-blue-a node iac/infra-stack/security/keypair.js && sls remove --stage dev-blue-a --config iac/infra-stack/serverless.yml",
-    "destroy:dev:cicd:blue-a": "sls remove --stage dev-blue-a --config iac/cicd-stack/serverless.yml",
-    "destroy:dev:infra:blue-b": "cross-env NODE_ENV=dev-blue-b node iac/infra-stack/security/keypair.js && sls remove --stage dev-blue-b --config iac/infra-stack/serverless.yml",
-    "destroy:dev:cicd:blue-b": "sls remove --stage dev-blue-b --config iac/cicd-stack/serverless.yml",
-    "destroy:dev:global": "sls remove --stage dev-blue-a --config iac/global-stack/serverless.yml",
-    "deploy:dev:blue-stack": "npm run deploy:dev:cicd:blue-a && npm run deploy:dev:infra:blue-a && npm run deploy:dev:cicd:blue-b && npm run deploy:dev:infra:blue-b && npm run deploy:dev:global",
-    "destroy:dev:blue-stack": "npm run destroy:dev:global && npm run destroy:dev:infra:blue-a && npm run destroy:dev:infra:blue-b && destroy:dev:cicd:blue-a && destroy:dev:cicd:blue-b",
-    "deploy:dev:green-stack": "npm run deploy:cicd:dev-eu-west-1"
+    "deploy:infra:ireland": "cross-env NODE_ENV=ireland node iac/infra-stack/security/keypair.js && sls deploy --stage ireland --config iac/infra-stack/serverless.yml",
+    "deploy:cicd:ireland": "sls deploy --stage ireland --config iac/cicd-stack/serverless.yml",
+    "deploy:infra:oregon": "cross-env NODE_ENV=oregon node iac/infra-stack/security/keypair.js && sls deploy --stage oregon --config iac/infra-stack/serverless.yml",
+    "deploy:cicd:oregon": "sls deploy --stage oregon --config iac/cicd-stack/serverless.yml",
+    "deploy:infra:sydney": "cross-env NODE_ENV=sydney node iac/infra-stack/security/keypair.js && sls deploy --stage sydney --config iac/infra-stack/serverless.yml",
+    "deploy:cicd:sydney": "sls deploy --stage sydney --config iac/cicd-stack/serverless.yml",
+    "deploy:global": "sls deploy --stage ireland --config iac/global-stack/serverless.yml",
+    "deploy:sydney": "npm run deploy:cicd:sydney && npm run deploy:infra:sydney",
+    "deploy:oregon": "npm run deploy:cicd:oregon && npm run deploy:infra:oregon",
+    "deploy:ireland": "npm run deploy:cicd:ireland && npm run deploy:infra:ireland",
+    "deploy": "npm run deploy:ireland && npm run deploy:oregon && npm run deploy:sydney && npm run deploy:global",
+    "destroy:infra:ireland": "cross-env NODE_ENV=ireland node iac/infra-stack/security/keypair.js && sls remove --stage ireland --config iac/infra-stack/serverless.yml",
+    "destroy:cicd:ireland": "sls remove --stage ireland --config iac/cicd-stack/serverless.yml",
+    "destroy:infra:oregon": "cross-env NODE_ENV=oregon node iac/infra-stack/security/keypair.js && sls remove --stage oregon --config iac/infra-stack/serverless.yml",
+    "destroy:cicd:oregon": "sls remove --stage oregon --config iac/cicd-stack/serverless.yml",
+    "destroy:sydney": "npm run destroy:cicd:sydney && npm run destroy:infra:sydney",
+    "destroy:oregon": "npm run destroy:cicd:oregon && npm run destroy:infra:oregon",
+    "destroy:ireland": "npm run destroy:cicd:ireland && npm run destroy:infra:ireland",
+    "destroy:global": "sls remove --stage ireland --config iac/global-stack/serverless.yml",
+    "destroy": "npm run destroy:global && npm run destroy:ireland && npm run destroy:oregon && destroy:sydney"
   },
   "devDependencies": {
-    "serverless-bundle": "^4.1.0",
-    "serverless-domain-manager": "^5.1.0",
     "serverless-dotenv-plugin": "^3.1.0",
-    "serverless-offline": "^6.8.0",
-    "serverless-plugin-cicd": "^0.1.1",
-    "serverless-plugin-scripts": "^1.0.2",
-    "serverless-pseudo-parameters": "^2.5.0"
+    "serverless-plugin-scripts": "^1.0.2"
   },
   "author": "Martin Greyling",
   "license": "MIT",
   "dependencies": {
     "aws-sdk": "^2.789.0",
     "dotenv-flow": "^3.2.0",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.5",
-    "request-promise-native": "^1.0.5",
     "serverless-s3-remover": "^0.6.0"
   }
 }

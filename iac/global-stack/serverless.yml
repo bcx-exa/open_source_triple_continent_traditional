@@ -7,7 +7,7 @@ custom:
   scripts:
     hooks:
       "deploy:finalize": >
-        aws dynamodb create-global-table --global-table-name ${env:DB_TABLE_NAME} --replication-group RegionName=${env:BLUE_REGION_A} RegionName=${env:BLUE_REGION_B} --region ${env:BLUE_REGION_A} --profile ${env:AWS_PROFILE}      
+        aws dynamodb create-global-table --global-table-name ${env:DB_TABLE_NAME} --replication-group RegionName=${env:IRELAND} RegionName=${env:OREGON} RegionName=${env:SYDNEY} --region ${env:IRELAND} --profile ${env:AWS_PROFILE}      
   dotenv:
     basePath: environments/
     exclude: # By default dotenv will add the env to your functions

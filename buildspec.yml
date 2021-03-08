@@ -15,8 +15,10 @@ phases:
     commands:
       - echo Serverless deploy started on $APP_NAME at `date`
       - npm run deploy:$NODE_ENV
-      - s3 sync
-      - aws auto
+      - aws s3 sync apps/Web s3://$WEB_S3_BUCKET/App --profile $AWS_PROFILE --delete 
+      - aws s3 sync apps/APP s3://$APP_S3_BUCKET/App --profile $AWS_PROFILE --delete
+      - aws autoscaling start-instance-refresh --auto-scaling-group-name $WEBASG
+      - aws autoscaling start-instance-refresh --auto-scaling-group-name $APPASG
   post_build:
     commands:
       - echo Deployed Successfully `date`
