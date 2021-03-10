@@ -29,6 +29,10 @@ Resources:
             Value: ${env:AWS_PROFILE}
           - Name: REGION
             Value: ${env:REGION}
+          - Name: WEBASG
+            Value: ${env:ASG_NAME_WEB}
+          - Name: APPASG
+            Value: ${env:ASG_NAME_APP}
       Source:
         Type: CODEPIPELINE
  
