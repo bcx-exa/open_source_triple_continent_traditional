@@ -6,7 +6,7 @@
 
 # Intro
 
-This code is to showcase how one could implement a traditional 3-Tier App across 3 continents using the ServerlessFramework and AWS.
+This code is to showcase how one could implement a traditional 3-Tier App across 3 continents using the Serverless Framework Open Source and AWS.
 
 ![requirement](docs/assets/Triple_Continent_Active_Active_bcx_exa.gif)
 
@@ -21,7 +21,7 @@ This code is to showcase how one could implement a traditional 3-Tier App across
 
 # Architecture
 
-![architecture](docs/assets/architecture/architecture.drawio)
+![architecture](docs/assets/architecture/../../architecture/architecture.jpg)
 
 ---
 # Quick Start - Local Environment Setup
