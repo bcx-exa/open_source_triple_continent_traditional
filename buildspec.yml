@@ -15,7 +15,7 @@ phases:
     commands:
       - echo Serverless deploy started at `date`
       - aws s3 sync apps/Web s3://$WEB_S3_BUCKET/App --profile $AWS_PROFILE --delete 
-      - aws s3 sync apps/APP s3://$APP_S3_BUCKET/App --profile $AWS_PROFILE --delete
+      - aws s3 sync apps/App s3://$APP_S3_BUCKET/App --profile $AWS_PROFILE --delete
       - npm run deploy:infra:$REGION
   post_build:
     commands:
