@@ -16,9 +16,9 @@ phases:
       - echo Serverless deploy started at `date`
       - aws s3 sync apps/Web s3://$WEB_S3_BUCKET/App --profile $AWS_PROFILE --delete 
       - aws s3 sync apps/App s3://$APP_S3_BUCKET/App --profile $AWS_PROFILE --delete
-      - npm run deploy:infra:$REGION
+      - npm run deploy:infra:$REPO_BRANCH
   post_build:
     commands:
-      - aws autoscaling start-instance-refresh --auto-scaling-group-name $WEBASG
-      - aws autoscaling start-instance-refresh --auto-scaling-group-name $APPASG
+      - aws autoscaling start-instance-refresh --auto-scaling-group-name $WEBASG --preferences '{"InstanceWarmup": 10, "MinHealthyPercentage": 50}'
+      - aws autoscaling start-instance-refresh --auto-scaling-group-name $APPASG --preferences '{"InstanceWarmup": 10, "MinHealthyPercentage": 50}'
       - echo Deployed Successfully `date`
