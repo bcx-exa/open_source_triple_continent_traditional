@@ -4,14 +4,13 @@
 
 • [Website](https://www.bcx.co.za/exa/) • [Docs](docs/architecture/architecture.svg)
 
-This is to demonstrate how to deploy a multi-region active-active monolithic architecture across 3 continents. 
----
+# Intro
 
-> We would recommend looking at a micro-services architecture should your app require a multi-region implementation.  That said, if it's not an option and you need a spring board, we hope this code will help you out!!
+A demo on how to implement a multi-region active active environment using the traditional 3-Tier architecture.
 
-![requirement](docs/assets/Triple_Continent_Active_Active_bcx_exa.pdf)
+![requirement](docs/assets/Triple_Continent_Active_Active_bcx_exa.gif)
 
-# Customer Requirement
+# Objective
 
 - 99.999% Availability (5.26 minutes DOWMTIME per year)
 - Low Latency For Users in US, EU and AUS
@@ -21,22 +20,25 @@ This is to demonstrate how to deploy a multi-region active-active monolithic arc
 - One Deployment Command
 
 
-## Pre-requistes
+---
+# Quick Start - Local Environment Setup
 
+---
+## Pre-requisites
+---
 1. Make sure you have Nodejs installed
 2. Make sure you have AWS CLI installed
 
 ### Initial Setup
 ---
 
-1.  Install Serverless globally
+1.  Install Global Packages
 
 ```bash
-npm install -g serverless
-npm install -g cross-env
+npm install -g serverless && npm install -g cross-env
 ```
 
-2. Install all packages
+2. Install Local Packages
 
 ```bash
 npm install
@@ -62,7 +64,7 @@ AWS_SECRET_ACCESS_KEY=<YOUR KEY>
 ```
 
 ---
-### Deployment
+# One Command Deployment
 ---
 
 
@@ -75,6 +77,7 @@ npm run deploy
 ---
 ### Destroying environments
 ---
+1. You can now destroy the demo using this command
 ```bash
 npm run destroy
 ```

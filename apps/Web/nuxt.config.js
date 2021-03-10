@@ -32,7 +32,11 @@ module.exports = {
 
   proxy: {
     '/patient/': {
-      target: 'https://appalb-eu-west-1.bcxcloudconsulting.com',
+      target: 'https://' + process.env.NUXT_ENV_APP_ALB,
+    },
+
+    '/patient*': {
+      target: 'https://' + process.env.NUXT_ENV_APP_ALB,
     },
   },
 

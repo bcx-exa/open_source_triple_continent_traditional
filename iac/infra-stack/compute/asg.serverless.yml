@@ -40,8 +40,8 @@ Resources:
                 aws s3 sync s3://${WEB_S3_BUCKET}/App App
                 cd App
                 npm install --unsafe-perm
-                cross-env NUXT_ENV_REGION=${REGION} NUXT_ENV_APP_ALB=${APP_ALB} NUXT_HOST=0.0.0.0 NUXT_PORT=3333 npm run build
-                cross-env NUXT_ENV_REGION=${REGION} NUXT_ENV_APP_ALB=${APP_ALB} NUXT_HOST=0.0.0.0 NUXT_PORT=3333 pm2 start
+                cross-env NUXT_ENV_REGION=${REGION} NUXT_ENV_APP_ALB=${APP_ALB} NUXT_HOST=0.0.0.0 NUXT_PORT=3000 npm run build
+                cross-env NUXT_ENV_REGION=${REGION} NUXT_ENV_APP_ALB=${APP_ALB} NUXT_HOST=0.0.0.0 NUXT_PORT=3000 npm run dev
                 echo "Yay everything started"
                 INSTANCE_ID="`wget -q -O - http://instance-data/latest/meta-data/instance-id`" && \
                 aws autoscaling complete-lifecycle-action --lifecycle-action-result CONTINUE --instance-id $INSTANCE_ID --lifecycle-hook-name ${LIFECYCLE_HOOK_WEB} --auto-scaling-group-name ${ASG_NAME_WEB} --region ${REGION} || 

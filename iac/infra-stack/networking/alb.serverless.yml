@@ -4,9 +4,9 @@ Resources:
     Properties:
       HealthCheckEnabled: true
       HealthCheckPath: /
-      HealthCheckPort: 3333
+      HealthCheckPort: 3000
       HealthCheckProtocol: HTTP
-      Port: 3333
+      Port: 3000
       Name: ${env:REGION}-web-tg
       Protocol: HTTP
       TargetType: instance

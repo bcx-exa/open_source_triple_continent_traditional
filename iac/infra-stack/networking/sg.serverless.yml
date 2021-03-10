@@ -66,8 +66,8 @@ Resources:
       GroupId:
         Ref: WebSg
       IpProtocol: tcp
-      FromPort: 3333
-      ToPort: 3333
+      FromPort: 3000
+      ToPort: 3000
       SourceSecurityGroupId:
         Fn::GetAtt:
           - WebAlbSg
