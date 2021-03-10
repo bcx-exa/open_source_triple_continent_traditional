@@ -13,12 +13,12 @@ phases:
       - serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY --profile $AWS_PROFILE -o
   build:
     commands:
-      - echo Serverless deploy started on $APP_NAME at `date`
-      - npm run deploy:$NODE_ENV
+      - echo Serverless deploy started at `date`
       - aws s3 sync apps/Web s3://$WEB_S3_BUCKET/App --profile $AWS_PROFILE --delete 
       - aws s3 sync apps/APP s3://$APP_S3_BUCKET/App --profile $AWS_PROFILE --delete
-      - aws autoscaling start-instance-refresh --auto-scaling-group-name $WEBASG
-      - aws autoscaling start-instance-refresh --auto-scaling-group-name $APPASG
+      - npm run deploy:infra:$REGION
   post_build:
     commands:
+      - aws autoscaling start-instance-refresh --auto-scaling-group-name $WEBASG
+      - aws autoscaling start-instance-refresh --auto-scaling-group-name $APPASG
       - echo Deployed Successfully `date`
