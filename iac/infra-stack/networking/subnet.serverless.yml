@@ -41,7 +41,7 @@ Resources:
         Ref: Vpc
       CidrBlock: ${env:APPSUBAZ1}
       AvailabilityZone: "${env:REGION}a"
-      MapPublicIpOnLaunch: true
+      MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
           Value: ${env:APPSUBAZ1}
@@ -52,7 +52,7 @@ Resources:
         Ref: Vpc
       CidrBlock: ${env:APPSUBAZ2}
       AvailabilityZone: "${env:REGION}b"
-      MapPublicIpOnLaunch: true
+      MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
           Value: ${env:APPSUBAZ2}
@@ -63,7 +63,7 @@ Resources:
         Ref: Vpc
       CidrBlock: ${env:APPSUBAZ3}
       AvailabilityZone: "${env:REGION}c"
-      MapPublicIpOnLaunch: true
+      MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
           Value: ${env:APPSUBAZ3}

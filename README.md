@@ -6,7 +6,7 @@
 
 # Intro
 
-A demo on how to implement a multi-region active active environment using the traditional 3-Tier architecture.
+This code is to showcase how one could implement a traditional 3-Tier App across 3 continents using the ServerlessFramework and AWS.
 
 ![requirement](docs/assets/Triple_Continent_Active_Active_bcx_exa.gif)
 
@@ -19,6 +19,9 @@ A demo on how to implement a multi-region active active environment using the tr
 - Canary Deployment Capabilities
 - One Deployment Command
 
+# Architecture
+
+![architecture](docs/assets/architecture/architecture.drawio)
 
 ---
 # Quick Start - Local Environment Setup
