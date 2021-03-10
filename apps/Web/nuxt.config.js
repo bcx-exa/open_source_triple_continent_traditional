@@ -1,16 +1,4 @@
-// const env = require('./secrets.json')
-const path = require('path')
-const dotenv = require('dotenv-flow')
-console.log('Current directory:', __dirname)
-// Load ENV variables
-const config = dotenv.config({ path: path.resolve('./environments/') })
-console.log(config)
 module.exports = {
-  publicRuntimeConfig: {
-    REGION: process.env.REGION || 'eu-west-1',
-    UI_STACK_NAME: process.env.UI_STACK_NAME,
-    APP_ALB: process.env.APP_ALB,
-  },
   mode: 'universal',
   head: {
     title: 'BCX Exa',
@@ -34,19 +22,18 @@ module.exports = {
   buildModules: [
     // Simple usage
     '@nuxtjs/vuetify',
-    ['@nuxtjs/dotenv', { path: '../../environments/', systemvars: true }],
     ['@nuxt/http'],
-    '@nuxtjs/proxy',
   ],
-  proxy: {
-    patient: {
-      target: 'http://localhost:7001/',
-      pathRewrite: { '^/patient/': '' },
-      changeOrigin: true,
-    },
-  },
+
   http: {
     proxy: true, // Can be also an object with default options
+    proxyHeaders: false,
+  },
+
+  proxy: {
+    '/patient/': {
+      target: 'https://appalb-eu-west-1.bcxcloudconsulting.com',
+    },
   },
 
   build: {

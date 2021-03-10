@@ -109,7 +109,7 @@ export class Patient {
     return 'Data Saved';
   }
   public async Read(id, version) {  
-    // Save to DB
+    /*Save to DB */
     const params1 = {
       TableName : process.env.DB_TABLE_NAME,
       KeyConditionExpression: 'id = :id and begins_with (version, :version)',

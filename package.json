@@ -14,16 +14,18 @@
     "deploy:sydney": "npm run deploy:cicd:sydney && npm run deploy:infra:sydney",
     "deploy:oregon": "npm run deploy:cicd:oregon && npm run deploy:infra:oregon",
     "deploy:ireland": "npm run deploy:cicd:ireland && npm run deploy:infra:ireland",
-    "deploy": "npm run deploy:ireland && npm run deploy:oregon && npm run deploy:sydney && npm run deploy:global",
+    "deploy": "npm run deploy:ireland & npm run deploy:oregon & npm run deploy:sydney && npm run deploy:global",
     "destroy:infra:ireland": "cross-env NODE_ENV=ireland node iac/infra-stack/security/keypair.js && sls remove --stage ireland --config iac/infra-stack/serverless.yml",
     "destroy:cicd:ireland": "sls remove --stage ireland --config iac/cicd-stack/serverless.yml",
     "destroy:infra:oregon": "cross-env NODE_ENV=oregon node iac/infra-stack/security/keypair.js && sls remove --stage oregon --config iac/infra-stack/serverless.yml",
     "destroy:cicd:oregon": "sls remove --stage oregon --config iac/cicd-stack/serverless.yml",
+    "destroy:infra:sydney": "cross-env NODE_ENV=sydney node iac/infra-stack/security/keypair.js && sls remove --stage sydney --config iac/infra-stack/serverless.yml",
+    "destroy:cicd:sydney": "sls remove --stage sydney --config iac/cicd-stack/serverless.yml",
     "destroy:sydney": "npm run destroy:cicd:sydney && npm run destroy:infra:sydney",
     "destroy:oregon": "npm run destroy:cicd:oregon && npm run destroy:infra:oregon",
     "destroy:ireland": "npm run destroy:cicd:ireland && npm run destroy:infra:ireland",
     "destroy:global": "sls remove --stage ireland --config iac/global-stack/serverless.yml",
-    "destroy": "npm run destroy:global && npm run destroy:ireland && npm run destroy:oregon && destroy:sydney"
+    "destroy": "npm run destroy:global && npm run destroy:ireland && npm run destroy:oregon && npm run destroy:sydney"
   },
   "devDependencies": {
     "serverless-dotenv-plugin": "^3.1.0",

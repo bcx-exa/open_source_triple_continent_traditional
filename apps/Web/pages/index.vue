@@ -9,15 +9,18 @@
     >
       {{ alertMessage }}
     </v-alert>
-    <div class="pa-4">
+    <p v-if="$fetchState.pending">Fetching data...</p>
+    <p v-else-if="$fetchState.error">An error occurred :(</p>
+
+    <div v-else class="pa-4">
       <h1 class="pl-4 pb-4">BCX Exa Medical</h1>
       <h3 class="pl-4 mb-2">
         You are being served by the
         <span color="primary--text">
           {{
-            $config.REGION === 'eu-west-1'
+            region === 'eu-west-1'
               ? 'IRELAND REGION'
-              : $config.REGION === 'us-west-2'
+              : region === 'us-west-2'
               ? 'OREGON REGION'
               : 'SYDNEY REGION'
           }}
@@ -35,7 +38,10 @@
         ></v-text-field>
 
         <v-btn
-          @click="getPatient()"
+          @click="
+            getPatient = true
+            $fetch()
+          "
           fab
           small
           class="ml-2"
@@ -56,7 +62,10 @@
           <v-icon dark> mdi-plus </v-icon>
         </v-btn>
         <v-btn
-          @click="initialize()"
+          @click="
+            initialize = true
+            $fetch()
+          "
           fab
           small
           class="ml-2"
@@ -173,7 +182,14 @@
             <v-btn color="blue darken-1" text @click="dialog = false">
               Close
             </v-btn>
-            <v-btn color="blue darken-1" text @click="createPatient()">
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="
+                createPatient = true
+                $fetch()
+              "
+            >
               Save
             </v-btn>
           </v-card-actions>
@@ -185,14 +201,68 @@
 
 <script>
 export default {
+  async fetch() {
+    console.log('Trigger Fetch')
+    console.log('initialize:', this.initialize)
+    console.log('getPatient:', this.getPatient)
+    console.log('createPatient:', this.createPatient)
+    if (this.initialize) {
+      this.$http.setHeader('Access-Control-Allow-Origin', '*')
+      this.$http.setHeader('Origin', '*')
+      const response = await this.$http.$post('/patient/initialize')
+
+      this.alertMessage = 'Database populated with dummy data'
+      this.alert = true
+      setTimeout(() => {
+        this.alert = false
+      }, 3000)
+      this.initialize = false
+    }
+    if (this.getPatient) {
+      this.$http.setHeader('Access-Control-Allow-Origin', '*')
+      this.$http.setHeader('Origin', '*')
+      this.loading = true
+
+      const info = await this.$http.$get(
+        '/patient?id=' + this.search + '&version=MetaData'
+      )
+
+      const history = await this.$http.$get(
+        '/patient?id=' + this.search + '&version=v'
+      )
+
+      this.loading = false
+      this.patientInfo = info.Items
+      this.patientHistory = history.Items
+
+      this.getPatient = false
+    }
+    if (this.createPatient) {
+      this.$http.setHeader('Access-Control-Allow-Origin', '*')
+      this.$http.setHeader('Origin', '*')
+      const response = await this.$http.$post('/patient', this.newPatient)
+
+      this.dialog = false
+      this.alertMessage = 'Patient Created'
+      this.alert = true
+      setTimeout(() => {
+        this.alert = false
+      }, 3000)
+
+      this.createPatient = false
+    }
+  },
   data: () => ({
+    initialize: false,
+    getPatient: false,
+    createPatient: false,
     alert: false,
     dialog: false,
     response: '',
     search: '',
     loading: false,
     alertMessage: '',
-    type: 'info',
+    region: process.env.NUXT_ENV_REGION,
     patientInfo: [],
     newPatient: {},
     patientHistory: [],
@@ -216,54 +286,6 @@ export default {
       { text: 'Blood Type', value: 'bloodTypes' },
     ],
   }),
-  methods: {
-    async initialize() {
-      this.$http.setHeader('Access-Control-Allow-Origin', '*')
-      this.$http.setHeader('Origin', '*')
-      const response = await this.$http.$post(
-        process.env.APP_ALB + '/patient/initialize'
-      )
-
-      this.alertMessage = 'Database populated with dummy data'
-      this.alert = true
-      setTimeout(() => {
-        this.alert = false
-      }, 3000)
-      this.response = response
-    },
-    async getPatient() {
-      this.$http.setHeader('Access-Control-Allow-Origin', '*')
-      this.$http.setHeader('Origin', '*')
-      this.loading = true
-
-      const info = await this.$http.$get(
-        process.env.APP_ALB + '/patient?id=' + this.search + '&version=MetaData'
-      )
-
-      const history = await this.$http.$get(
-        process.env.APP_ALB + '/patient?id=' + this.search + '&version=v'
-      )
-
-      this.loading = false
-      this.patientInfo = info.Items
-      this.patientHistory = history.Items
-    },
-    async createPatient() {
-      this.$http.setHeader('Access-Control-Allow-Origin', '*')
-      this.$http.setHeader('Origin', '*')
-      const response = await this.$http.$post(
-        process.env.APP_ALB + '/patient',
-        this.newPatient
-      )
-
-      this.dialog = false
-      this.alertMessage = 'Patient Created'
-      this.alert = true
-      setTimeout(() => {
-        this.alert = false
-      }, 3000)
-    },
-  },
 }
 </script>
 

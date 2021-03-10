@@ -132,7 +132,7 @@ Resources:
                 cd App
                 npm install --unsafe-perm
                 npm run build
-                pm2 start
+                cross-env NODE_ENV=${REGION} DB_TABLE_NAME=${DB_TABLE_NAME} REGION=${REGION} pm2 start
                 echo "Yay everything started"
                 INSTANCE_ID="`wget -q -O - http://instance-data/latest/meta-data/instance-id`" && \
                 aws autoscaling complete-lifecycle-action --lifecycle-action-result CONTINUE --instance-id $INSTANCE_ID --lifecycle-hook-name ${LIFECYCLE_HOOK_APP} --auto-scaling-group-name ${ASG_NAME_APP} --region ${REGION} || 
@@ -141,6 +141,7 @@ Resources:
               LIFECYCLE_HOOK_APP: ${env:LIFECYCLE_HOOK_APP}
               ASG_NAME_APP: ${env:ASG_NAME_APP}
               REGION: ${env:REGION}
+              DB_TABLE_NAME: ${env:DB_TABLE_NAME}
         IamInstanceProfile:
           Arn: !GetAtt ec2RoleInstanceProfile.Arn
   AppAsg:
