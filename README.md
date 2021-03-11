@@ -6,9 +6,14 @@
 
 # Intro
 
-This code is to showcase how one could implement a traditional 3-Tier App across 3 continents using the Serverless Framework Open Source and AWS.
+This code is to showcase how one could implement a traditional 3-Tier App across 3 continents using the Serverless Framework - Open Source and AWS.
 
 ![requirement](docs/assets/Triple_Continent_Active_Active_bcx_exa.gif)
+
+# Dummy Use-Case
+
+BCX Exa Medical wanted a highly available application that services their first responders and ER doctors across the globe.  The main aim is for doctors and first responders to access a patients medical history in life or death situations as well as give doctors across the world access to the same information should one doctor contact another for help.  
+
 
 # Objective
 
@@ -21,8 +26,15 @@ This code is to showcase how one could implement a traditional 3-Tier App across
 
 # Architecture
 
+A general idea of the resources used in this solution.
+
 ![architecture](docs/assets/architecture/../../architecture/architecture.jpg)
 
+## CICD
+
+A view of how the CICD pipeline works for this solution.
+
+![cicd](docs/assets/architecture/../../architecture/cicd_flow.jpg)
 ---
 # Quick Start - Local Environment Setup
 
@@ -31,6 +43,7 @@ This code is to showcase how one could implement a traditional 3-Tier App across
 ---
 1. Make sure you have Nodejs installed
 2. Make sure you have AWS CLI installed
+3. You need to have a domain registered in Route53, change the domain name in the environments folder to match your domain.
 
 ### Initial Setup
 ---
