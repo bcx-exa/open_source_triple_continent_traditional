@@ -33,6 +33,7 @@ resources:
   - ${file(iac/infra-stack/networking/sg.serverless.yml)}
   - ${file(iac/infra-stack/networking/alb.serverless.yml)}
   - ${file(iac/infra-stack/networking/transitgw.serverless.yml)}
+  # - ${file(iac/infra-stack/networking/waf.serverless.yml)}
   # Compute
   - ${file(iac/infra-stack/compute/asg.serverless.yml)}
   # Database
