@@ -33,6 +33,12 @@ Resources:
             Value: ${env:ASG_NAME_WEB}
           - Name: APPASG
             Value: ${env:ASG_NAME_APP}
+          - Name: WEB_S3_BUCKET
+            Value: ${env:WEB_S3_BUCKET}
+          - Name: APP_S3_BUCKET
+            Value: ${env:APP_S3_BUCKET}  
+          - Name: REPO_BRANCH
+            Value: ${env:REPO_BRANCH}  
       Source:
         Type: CODEPIPELINE
  
