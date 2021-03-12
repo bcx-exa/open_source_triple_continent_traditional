@@ -5,20 +5,16 @@ phases:
     runtime-versions:
       nodejs: 12  
     commands:
-      - echo Installing serverless...
-      - npm install -g serverless --unsafe-perm
-      - npm install -g cross-env --unsafe-perm
-      - echo Installing source NPM dependencies...
-      - npm install
       - echo Configuring AWS Profile...
       - serverless config credentials --provider aws --key $AWS_ACCESS_KEY_ID --secret $AWS_SECRET_ACCESS_KEY --profile $AWS_PROFILE -o
   build:
     commands:
-      - echo Serverless deploy started at `date`
+      - echo Copying apps to respective S3 buckets at `date`
       - aws s3 sync apps/Web s3://$WEB_S3_BUCKET/App --profile $AWS_PROFILE --delete 
       - aws s3 sync apps/App s3://$APP_S3_BUCKET/App --profile $AWS_PROFILE --delete
   post_build:
     commands:
+      - echo Initiating Auto-Scaling instance refresh at `date`
       - aws autoscaling start-instance-refresh --region $REGION --auto-scaling-group-name $REGION-$WEBASG
       - aws autoscaling start-instance-refresh --region $REGIOn --auto-scaling-group-name $REGION-$APPASG
       - echo Deployed Successfully `date`
