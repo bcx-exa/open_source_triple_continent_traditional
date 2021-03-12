@@ -46,8 +46,7 @@ Resources:
             - 
               Name: CodeBuild
               InputArtifacts: 
-                -
-                  Name: ${self:service.name}
+                - Name: ${self:service.name}
               ActionTypeId: 
                 Category: Build
                 Owner: AWS 
@@ -59,5 +58,4 @@ Resources:
               RunOrder: 1 
       ArtifactStore: 
         Type: S3 
-        Location:
-          Ref: ServerlessDeploymentBucket
+        Location: ${env:WEB_S3_BUCKET}-cicd

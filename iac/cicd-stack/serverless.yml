@@ -5,15 +5,18 @@ plugins:
   - serverless-plugin-scripts
   - serverless-s3-remover
 custom:
-  remover:
-    buckets:
-      - ${env:WEB_S3_BUCKET}
-      - ${env:APP_S3_BUCKET}
   scripts:
     hooks:
-      "deploy:finalize": >
+      "before:deploy:deploy": >
+        aws s3api create-bucket --bucket ${env:WEB_S3_BUCKET}-cicd --profile ${env:AWS_PROFILE} --region ${env:REGION} --create-bucket-configuration LocationConstraint=${env:REGION} &&
+        aws s3api create-bucket --bucket ${env:WEB_S3_BUCKET} --profile ${env:AWS_PROFILE} --region ${env:REGION} --create-bucket-configuration LocationConstraint=${env:REGION} &&
+        aws s3api create-bucket --bucket ${env:APP_S3_BUCKET} --profile ${env:AWS_PROFILE} --region ${env:REGION} --create-bucket-configuration LocationConstraint=${env:REGION} &&
         aws s3 sync apps/Web s3://${env:WEB_S3_BUCKET}/App --profile ${env:AWS_PROFILE} --exclude /*/*/node_modules/* --delete &&
         aws s3 sync apps/APP s3://${env:APP_S3_BUCKET}/App --profile ${env:AWS_PROFILE} --exclude /*/*/node_modules/* --delete
+      "remove:remove": >
+        aws s3 rb s3://${env:WEB_S3_BUCKET}-cicd --force --profile ${env:AWS_PROFILE} &&
+        aws s3 rb s3://${env:WEB_S3_BUCKET} --force --profile ${env:AWS_PROFILE} &&
+        aws s3 rb s3://${env:APP_S3_BUCKET} --force --profile ${env:AWS_PROFILE}
   dotenv:
     basePath: environments/
     exclude: # By default dotenv will add the env to your functions
@@ -29,6 +32,5 @@ provider:
 resources:
   - Resources:
   - ${file(iac/cicd-stack/security/iam.serverless.yml)}
-  - ${file(iac/cicd-stack/storage/s3.serverless.yml)}
   - ${file(iac/cicd-stack/cicd/codebuild.serverless.yml)}
   - ${file(iac/cicd-stack/cicd/codepipeline.serverless.yml)}

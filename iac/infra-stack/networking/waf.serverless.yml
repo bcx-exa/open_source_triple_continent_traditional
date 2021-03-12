@@ -47,6 +47,6 @@ Resources:
       ResourceArn: !Ref WebAlb
 Outputs:
   Waf:
-    Value: !GetAtt Waf.Arn #!Select [1, !Split ["|", !Ref Waf]]
+    Value: !GetAtt Waf.Arn 
     Export:
       Name: ${env:REGION}-Waf
