@@ -4,18 +4,18 @@
 
 • [Website](https://www.bcx.co.za/exa/) • [Docs](docs/architecture/architecture.svg)
 
-# Intro
+## Quick Summary
 
 This code is to showcase how one could implement a traditional 3-Tier App across 3 continents using the Serverless Framework - Open Source and AWS.
 
 ![requirement](docs/assets/Triple_Continent_Active_Active_bcx_exa.gif)
 
-# Dummy Use-Case
+## Dummy Use-Case
 
 BCX Exa Medical wanted a highly available application that services their first responders and ER doctors across the globe.  The main aim is for doctors and first responders to access a patients medical history in life or death situations as well as give doctors across the world access to the same information should one doctor contact another for help.  
 
 
-# Objective
+## Objective
 
 - 99.999% Availability (5.26 minutes DOWMTIME per year)
 - Low Latency For Users in US, EU and AUS
