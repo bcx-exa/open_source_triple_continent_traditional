@@ -7,6 +7,7 @@ phases:
     commands:
       - echo Installing serverless...
       - npm install -g serverless --unsafe-perm
+      - npm install -g cross-env --unsafe-perm
       - echo Installing source NPM dependencies...
       - npm install
       - echo Configuring AWS Profile...
@@ -19,6 +20,6 @@ phases:
       - npm run deploy:infra:$REPO_BRANCH
   post_build:
     commands:
-      - aws autoscaling start-instance-refresh --auto-scaling-group-name $WEBASG
-      - aws autoscaling start-instance-refresh --auto-scaling-group-name $APPASG
+      - aws autoscaling start-instance-refresh --region $REGION --auto-scaling-group-name $REGION-$WEBASG
+      - aws autoscaling start-instance-refresh --region $REGIOn --auto-scaling-group-name $REGION-$APPASG
       - echo Deployed Successfully `date`

@@ -34,8 +34,9 @@
   "author": "Martin Greyling",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.789.0",
+    "aws-sdk": "^2.861.0",
     "dotenv-flow": "^3.2.0",
+    "enquirer": "^2.3.6",
     "serverless-s3-remover": "^0.6.0"
   }
 }
