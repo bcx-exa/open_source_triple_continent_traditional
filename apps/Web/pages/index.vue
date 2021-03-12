@@ -25,6 +25,7 @@
               : 'SYDNEY REGION'
           }}
         </span>
+        This is version 2 of the site and contains updates
       </h3>
 
       <!-- Toolbar -->
