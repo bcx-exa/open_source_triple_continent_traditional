@@ -15,6 +15,6 @@ phases:
   post_build:
     commands:
       - echo Initiating Auto-Scaling instance refresh at `date`
-      - aws autoscaling start-instance-refresh --region $REGION --auto-scaling-group-name $REGION-$WEBASG
-      - aws autoscaling start-instance-refresh --region $REGIOn --auto-scaling-group-name $REGION-$APPASG
+      - aws autoscaling start-instance-refresh --region $REGION --auto-scaling-group-name $REGION-web-asg
+      - aws autoscaling start-instance-refresh --region $REGIOn --auto-scaling-group-name $REGION-app-asg
       - echo Deployed Successfully `date`
